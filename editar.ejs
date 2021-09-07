@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/css/main.css">
+    <title>Editar Livros</title>
+</head>
+
+<body>
+    <header>
+        <section class="warper">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="/">Biblioteca</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#conteudoNavbarSuportado" aria-controls="conteudoNavbarSuportado" aria-expanded="false"
+                    aria-label="Alterna navegação">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="conteudoNavbarSuportado">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">Home<span class="sr-only">(página atual)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/lista">Acervo</a>
+                        </li>
+                        <!-- <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Ação</a>
+                        <a class="dropdown-item" href="#">Outra ação</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Algo mais aqui</a>
+                      </div>
+                    </li> -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/cadastro">Cadastrar</a>
+                        </li>
+                    </ul>
+                    <!-- <form class="form-inline my-2 my-lg-0" action="/pesquisa" method="GET">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Pesquisar" name="sh" aria-label="Pesquisar">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Pesquisar</button>
+                  </form> -->
+
+                    <form class="d-flex" action="/pesquisa" method="GET">
+                        <input type="text" class="form-control" placeholder="Pesquisar" name="sh" />
+
+                        <button class="btn btn-light d-inline-flex" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                            </svg>
+                        </button>
+
+                    </form>
+                </div>
+            </nav>
+        </section>
+    </header>
+    <main>
+        <div class="container my-5">
+            <div class="row">
+                <div class="col">
+                    <h1>Editar Livros</h1>
+                    <% itens.forEach(function(livro){ %>
+                        <form action="/update" method="POST">
+                            <input class="form-control" type="hidden" readonly id="_id" name="_id"
+                                value="<%= livro._id %>">
+                            <div class="form-group">
+                                <label for="titulo">Título</label>
+                                <input class="form-control" type="text" id="titulo" name="titulo"
+                                    placeholder="Título do livro" required value="<%= livro.titulo %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="autor">Autor</label>
+                                <input class="form-control" type="text" id="autor" name="autor"
+                                    placeholder="Autor do livro" required value="<%= livro.autor %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="editora">Editora</label>
+                                <input class="form-control" type="text" id="editora" name="editora"
+                                    placeholder="Editora" required value="<%= livro.editora %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="ano">Ano da edição</label>
+                                <input class="form-control" type="number" pattern="[0-9]+$" id="ano" name="ano"
+                                    placeholder="Nano do edição" required value="<%= livro.ano %>">
+                            </div>
+                            <div class="form-group">
+                                <label for="quantidade">Quantidade</label>
+                                <input class="form-control" type="number" pattern="[0-9]+$" id="quantidade" name="quantidade"
+                                    placeholder="Quantidade de livros" required value="<%= livro.quantidade %>">
+                            </div>
+                            <div id="dialog_erro" class="alert alert-warning alert-dismissible fade show text-center"
+                                role="alert" style="display: none;">
+                                <p>
+                                    Por favor, verifique os campos em vermelho e tente novamente.
+                                </p>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div id="dialog_sucesso" class="alert alert-success alert-dismissible fade show text-center"
+                                role="alert" style="display: none;">
+                                <p>
+                                    Editado com sucesso.
+                                </p>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                                    onclick="refre">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                        </form>
+                        <% }) %>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+    <footer>
+        <section class="warper">
+            <section class="text-center text-black" style="background-color: #f1f1f1;">
+                <!-- Grid container -->
+                <div class="container pt-5">
+
+                    <!-- Section: Social media -->
+                </div>
+                <!-- Grid container -->
+
+                <!-- Copyright -->
+                <div class="text-center text-dark p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                    © 2020 Copyright:
+                    <a class="text-dark" href="#">Biblioteca.com</a>
+                </div>
+                <!-- Copyright -->
+            </section>
+        </section>
+    </footer>
+
+
+
+    <!--  personal scripts -->
+    <!-- <script src="./public/js/cadastro_notas.js"></script> -->
+    <script src="public/js/main.js"></script>
+
+
+    <!-- //////////////////////////////////////////////////////////////////////////////////// -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
