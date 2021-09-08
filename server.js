@@ -127,37 +127,17 @@ app.post("/update", (req, res) => {
 
 //pesquisa
 
-// function diacriticSensitiveRegex(string = '') {
-//     return string
-//         .replace(/a/g, '[a,á,à,ä]')
-//         .replace(/c/g, '[c,ç]')
-//         .replace(/e/g, '[e,é,ë]')
-//         .replace(/i/g, '[i,í,ï]')
-//         .replace(/o/g, '[o,ó,ö,ò]')
-//         .replace(/u/g, '[u,ü,ú,ù]');
-// }
-
 app.get("/pesquisa", (req, res) => {
     let valor = req.query.sh;//Recebe o nema da box pesquisa
     let campo = req.query.campo;
-    
-    //valor = valor.match(/[\p{Letter}\s]+/gu);
-    // valor = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();//Retira os acentos com rejex
-
-    // { $regex : new RegExp(valor, "i") } --> fica case insensitive
-
-    // let qr = {
-    //     name:
-    //     {
-    //         $search: valor,
-    //         $caseSensitive: false,
-    //         $diacriticSensitive: false
-    //     }
-    // }
-
-    // qr = { titulo: { $regex: valor, $options: 'i' } };
-    qr = `{ "${campo}": { "$regex": "${valor}", "$options": "i" } }`;
+    if (campo != "all") {
+        qr = `{ "${campo}": { "$regex": "${valor}", "$options": "i" } }`;
+    }
+    else{
+        qr = `{ "$or":[{"titulo":"${valor}"},{"autor":"${valor}"},{"editora":"${valor}"},{"ano":"${valor}"}, {"quantidade" : "${valor}" }] }`
+    }
     let qro = JSON.parse(qr);
+
     let item = Livros.find(qro, (err, itens) => {
         if (err) {
             return res.status(500).send("Erro ao consultar livro!");
@@ -169,20 +149,21 @@ app.get("/pesquisa", (req, res) => {
 
 });
 
-
 // /////////////////////////////////////////////
 
-app.get("/teste", (req, res) => {
-    if (err) {
-        return res.status(500).send("Erro ao consultar livro!");
+app.get('/fresh', function (req, res) {
+    res.set('Cache-control', 'public, max-age=1');
+    console.log(req.fresh);
+
+    if (req.fresh) {
+        console.log("index fresh")
+        res.render("index");
+    }else{
+        console.log("index no fresh")
+        res.render("index");
     }
-    else {
-        res.render("teste");
-    }
-});
-
-
-
+    
+  });
 
 
 

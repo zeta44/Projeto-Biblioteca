@@ -8,3 +8,10 @@
         -moz-appearance: textfield;
         appearance: textfield;
     }
+    /* Geral */
+
+    main {
+        min-height: 80vh;
+    }
+
+    
