@@ -1,0 +1,29 @@
+{
+    "$or": [
+        {
+            "titulo": {
+                "$regex": "${valor}",
+                "$options": "i"
+            }
+        },
+        {
+            "autor": {
+                "$regex": "${valor}",
+                "$options": "i"
+            }
+        },
+        {
+            "editora": {
+                "$regex": "${valor}",
+                "$options": "i"
+            }
+        },
+        {
+            "$function": "function() { return this.ano.toString().match(${valor}) != null; }"
+        },
+        {
+            "$function": "function() { return this.quantidade.toString().match(${valor}) != null; }"
+        }
+    ]
+    
+}

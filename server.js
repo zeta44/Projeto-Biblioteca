@@ -15,8 +15,8 @@ const Livros = mongoose.model("livros", {
     titulo: String,
     autor: String,
     editora: String,
-    ano: Number,
-    quantidade: Number,
+    ano: String,
+    quantidade: String,
 })
 
 //ejs mecanismo de view
@@ -133,14 +133,49 @@ app.get("/pesquisa", (req, res) => {
     if (campo != "all") {
         qr = `{ "${campo}": { "$regex": "${valor}", "$options": "i" } }`;
     }
-    else{
-        qr = `{ "$or":[{"titulo":"${valor}"},{"autor":"${valor}"},{"editora":"${valor}"},{"ano":"${valor}"}, {"quantidade" : "${valor}" }] }`
+    else {
+        qr = `{
+            "$or": [
+                {
+                    "titulo": {
+                        "$regex": "${valor}",
+                        "$options": "i"
+                    }
+                },
+                {
+                    "autor": {
+                        "$regex": "${valor}",
+                        "$options": "i"
+                    }
+                },
+                {
+                    "editora": {
+                        "$regex": "${valor}",
+                        "$options": "i"
+                    }
+                },
+                {
+                    "ano": {
+                        "$regex": "${valor}",
+                        "$options": "i"
+                    }
+                },
+                {
+                    "quantidade": {
+                        "$regex": "${valor}",
+                        "$options": "i"
+                    }
+                }
+               
+            ]
+            
+        }`
     }
     let qro = JSON.parse(qr);
 
     let item = Livros.find(qro, (err, itens) => {
         if (err) {
-            return res.status(500).send("Erro ao consultar livro!");
+            return res.status(500).send(`Erro ao consultar livro!\n${err}`);
         }
         else {
             res.render("lista", { item: itens });
@@ -158,12 +193,12 @@ app.get('/fresh', function (req, res) {
     if (req.fresh) {
         console.log("index fresh")
         res.render("index");
-    }else{
+    } else {
         console.log("index no fresh")
         res.render("index");
     }
-    
-  });
+
+});
 
 
 
